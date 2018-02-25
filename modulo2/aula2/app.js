@@ -23,8 +23,8 @@ server.post('/api/messages', connector.listen());
 
 // Conexão com o QnA Maker
 var recognizer = new cognitiveServices.QnAMakerRecognizer({
-    knowledgeBaseId: 'b0f2e601-ebaf-4ee9-9a9e-9e5617d468d3',
-    subscriptionKey: '43a161e6aaaa44fca7359ef9f4dc9a32',
+    knowledgeBaseId: 'Sua ID',
+    subscriptionKey: 'Sua Key',
     top: 3
     // 3 respostas mais relevantes
 });
