@@ -23,10 +23,15 @@ server.post('/api/messages', connector.listen());
 
 // Conexão com o QnA Maker
 var recognizer = new cognitiveServices.QnAMakerRecognizer({
+<<<<<<< HEAD
     knowledgeBaseId: 'b0f2e601-ebaf-4ee9-9a9e-9e5617d468d3',
     subscriptionKey: '43a161e6aaaa44fca7359ef9f4dc9a32',
     top: 3
     // 3 respostas mais relevantes
+=======
+    knowledgeBaseId: '',
+    subscriptionKey: '' 
+>>>>>>> 43ba9a6de717e639b712563c7523488c98c47785
 });
 
 // Biblioteca para oferecer ao usuário todas as opções determinadas
@@ -42,4 +47,42 @@ var basicQnAMakerDialog = new cognitiveServices.QnAMakerDialog({
     feedbackLib: qnaMakerTools
 });
 
+<<<<<<< HEAD
 bot.dialog('/', basicQnAMakerDialog)
+=======
+basicQnAMakerDialog.respondFromQnAMakerResult = function(session, qnaMakerResult){
+    // Salva a pergunta do usuário
+    var question = session.message.text;
+    session.conversationData.userQuestion = question;
+
+    // Checar se o resultado está formatado para ser um card
+    var isCardFormat = qnaMakerResult.answers[0].answer.includes(';');
+
+    if(!isCardFormat){
+        // Se não houver um ponto e vírgula na frase, então envia uma resposta normal
+        session.send(qnaMakerResult.answers[0].answer);
+    }else if(qnaMakerResult.answers && qnaMakerResult.score >= 0.5){
+        var qnaAnswer = qnaMakerResult.answers[0].answer;
+        // Quebra a resposta em um vetor
+        var qnaAnswerData = qnaAnswer.split(';');
+        var title = qnaAnswerData[0];
+        var description = qnaAnswerData[1];
+        var url = qnaAnswerData[2];
+        var imageURL = qnaAnswerData[3];
+
+        var msg = new builder.Message(session)
+        msg.attachments([
+            new builder.HeroCard(session)
+            .title(title)
+            .subtitle(description)
+            .images([builder.CardImage.create(session, imageURL)])
+            .buttons([
+                builder.CardAction.openUrl(session, url, "Saiba Mais")
+            ])
+        ]);
+    }
+    session.send(msg).endDialog();
+}
+
+//bot.dialog('/', basicQnAMakerDialog)
+>>>>>>> 43ba9a6de717e639b712563c7523488c98c47785
