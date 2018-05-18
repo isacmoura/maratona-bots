@@ -1,6 +1,9 @@
+import { BrazilianQnaMakerTools } from '../../tools/brazilianQnaMakerTools';
+
 var builder = require('botbuilder');
 var restify = require('restify');
-var cognitiveServices = require('botbuilder-cognitiveservices')
+var cognitiveServices = require('botbuilder-cognitiveservices');
+var brazilianTools = require('../../tools/brazilianQnaMakerTools');
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -23,15 +26,15 @@ server.post('/api/messages', connector.listen());
 
 // Conexão com o QnA Maker
 var recognizer = new cognitiveServices.QnAMakerRecognizer({
-    knowledgeBaseId: 'Sua ID',
-    subscriptionKey: 'Sua Key',
+    knowledgeBaseId: 'b0f2e601-ebaf-4ee9-9a9e-9e5617d468d3',
+    subscriptionKey: '43a161e6aaaa44fca7359ef9f4dc9a32',
     top: 3
     // 3 respostas mais relevantes
 });
 
 // Biblioteca para oferecer ao usuário todas as opções determinadas
-var qnaMakerTools = new cognitiveServices.QnAMakerTools();
-bot.library(qnaMakerTools.createLibrary());
+var qnaMakerTools = new brazilianTools.BrazilianQnaMakerTools();
+bot.library(BrazilianQnaMakerTools.createLibrary());
 
 // Diálogo de interação com o usuário
 var basicQnAMakerDialog = new cognitiveServices.QnAMakerDialog({
@@ -39,7 +42,7 @@ var basicQnAMakerDialog = new cognitiveServices.QnAMakerDialog({
     defaultMessage: 'Não encontrado! Tente mudando os termos da pergunta!',
     qnaThreshold: 0.5,
     // Nível de confiança na resposta
-    feedbackLib: qnaMakerTools
+    feedbackLib: BrazilianQnaMakerTools
 });
 
 bot.dialog('/', basicQnAMakerDialog)
